@@ -11,6 +11,7 @@ namespace EventHubGroup56FA
     public class eventhubtrigger
     {
         private readonly ILogger _logger;
+        private readonly string? machineName = Environment.GetEnvironmentVariable("WEBSITE_HOSTNAME");
 
         // If arraySize is null, set default to 5, otherwise get the environment variable value
 
@@ -24,10 +25,15 @@ namespace EventHubGroup56FA
 
         [Function("eventhubtrigger")]
         [EventHubOutput("%EventHubName%", Connection = "ehconnstring")]
-        public EventData[] Run([EventHubTrigger("%EventHubName%", Connection = "ehconnstring", ConsumerGroup = "$Default", IsBatched = true)] EventData[] input)
+        public EventData[] Run([EventHubTrigger("%EventHubName%", Connection = "ehconnstring", ConsumerGroup = "$Default", IsBatched = true)] EventData[] input, FunctionContext context)
         //public void Run([EventHubTrigger("groupeventhub", Connection = "ehconnstring", ConsumerGroup = "$default", IsBatched = true)] string[] input)
         {
             _logger.LogInformation($"First Event Hubs triggered message: {input[0].PartitionKey}");
+
+            if (machineName != null)
+            {
+                _logger.LogInformation($"MachineName: {machineName}");
+            }
 
             // Create a List of Type String
             var eventDataList = new List<EventData>();
