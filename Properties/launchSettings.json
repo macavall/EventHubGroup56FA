@@ -2,8 +2,7 @@
   "profiles": {
     "EventHubGroup56FA": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7026",
-      "launchBrowser": false
+      "commandLineArgs": "--port 7026"
     }
   }
 }

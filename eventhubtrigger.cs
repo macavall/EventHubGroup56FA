@@ -21,8 +21,8 @@ namespace EventHubGroup56FA
         }
 
         [Function("eventhubtrigger")]
-        [EventHubOutput("groupeventhub", Connection = "ehconnstring")]
-        public string[] Run([EventHubTrigger("groupeventhub", Connection = "ehconnstring", ConsumerGroup = "$default", IsBatched = true)] string[] input)
+        [EventHubOutput("%EventHubName%", Connection = "ehconnstring")]
+        public string[] Run([EventHubTrigger("%EventHubName%", Connection = "ehconnstring", ConsumerGroup = "$Default", IsBatched = true)] string[] input)
         //public void Run([EventHubTrigger("groupeventhub", Connection = "ehconnstring", ConsumerGroup = "$default", IsBatched = true)] string[] input)
         {
             // Create a List of Type String
