@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿//using Microsoft.Extensions.Logging;
 
-public  interface IMyService
-{
-    public void MyServiceMethod(ILogger log);
-}
+//public  interface IMyService
+//{
+//    public void MyServiceMethod(ILogger log);
+//}

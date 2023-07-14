@@ -7,10 +7,10 @@ internal class Program
     {
         var host = new HostBuilder()
         .ConfigureFunctionsWorkerDefaults()
-        .ConfigureServices( s =>
-        {
-            s.AddSingleton<IMyService, MyService>();
-        })
+        //.ConfigureServices( s =>
+        //{
+        //    s.AddSingleton<IMyService, MyService>();
+        //})
         .Build();
 
         host.Run();
