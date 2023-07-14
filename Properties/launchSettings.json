@@ -2,7 +2,7 @@
   "profiles": {
     "EventHubGroup56FA": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7026"
+      "commandLineArgs": "--port 7026 --verbose"
     }
   }
 }

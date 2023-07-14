@@ -16,6 +16,7 @@ namespace EventHubGroup56FA
         private readonly ILogger _logger;
         private readonly IMyService myService;
         private readonly string? machineName = Environment.GetEnvironmentVariable("WEBSITE_HOSTNAME");
+        public EventData tempEventData;
 
         // If arraySize is null, set default to 5, otherwise get the environment variable value
 
@@ -30,10 +31,15 @@ namespace EventHubGroup56FA
 
         [Function("eventhubtrigger")]
         [EventHubOutput("%EventHubName%", Connection = "ehconnstring")]
-        public string[] Run([EventHubTrigger("%EventHubName%", Connection = "ehconnstring", ConsumerGroup = "$Default", IsBatched = true)] string[] input)
+        public List<EventData> Run([EventHubTrigger("%EventHubName%", Connection = "ehconnstring", ConsumerGroup = "$Default", IsBatched = true)] string[] input)
         //public void Run([EventHubTrigger("groupeventhub", Connection = "ehconnstring", ConsumerGroup = "$default", IsBatched = true)] string[] input)
         {
+            bool started = false;
+
+
             //_logger.LogInformation($"First Event Hubs triggered message: {input[0].PartitionKey}");
+
+            string temp = input[0];
 
             try
             {
@@ -48,38 +54,64 @@ namespace EventHubGroup56FA
             }
 
             // Create a List of Type String
-            var eventDataList = new List<string>();
+            var eventDataList = new List<EventData>();
 
             // Log all messages and contents
-            foreach(var msg in input)
+            for(int x = 0; x < arraySize*5; x++)
             {
+
+
                 //var msgString = msg.EventBody.ToString();
 
-                _logger.LogInformation($"First Event Hubs triggered message: {msg}");
+                //_logger.LogInformation($"First Event Hubs triggered message: {msg}");
 
-                for (int i = 0; i < arraySize; i++)
+                //for (int i = 0; i < arraySize; i++)
+                //{
+                //    //var newEvent = new EventData();
+
+                var jsonObject = new
                 {
-                    //var newEvent = new EventData();
+                    dateTime = DateTime.UtcNow.ToString("yyyyMMddThhmmss")
+                };
 
-                    //var jsonObject = new
-                    //{
-                    //    dateTime = DateTime.UtcNow.ToString("yyyyMMddThhmmss")
-                    //};
+                //    //string dateTime = DateTime.UtcNow.ToString("yyyyMMddThhmmss");
 
-                    //string dateTime = DateTime.UtcNow.ToString("yyyyMMddThhmmss");
+                string dateTimeJson = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObject);
 
-                    //string dateTimeJson = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObject);
+                //    //byte[] binaryData = Encoding.UTF8.GetBytes(dateTimeJson);
 
-                    //byte[] binaryData = Encoding.UTF8.GetBytes(dateTimeJson);
+                //    //BinaryData finalBinaryData = new BinaryData(binaryData);
 
-                    //BinaryData finalBinaryData = new BinaryData(binaryData);
+                //    //newEvent.EventBody = finalBinaryData;
 
-                    //newEvent.EventBody = finalBinaryData;
+                //    //System.Threading.Thread.Sleep(100);
 
-                    eventDataList.Add(DateTime.UtcNow.ToString("yyyyMMddThhmmss"));
-                }
+                //    var keep = temp;
+
+                //    if (started == false)
+                //    {
+                //        var pretemp = Newtonsoft.Json.JsonConvert.DeserializeObject(temp);
+
+                //        var fintemp = Newtonsoft.Json.JsonConvert.SerializeObject(pretemp);
+
+                eventDataList.Add(new EventData()
+                {
+                    EventBody = new BinaryData(Encoding.UTF8.GetBytes(dateTimeJson))
+                });
+
+                //        started = true;
+                //    }
+
+                //    eventDataList.Add(tempEventData);
+
+                //    //eventDataList.Add(new EventData()
+                //    //{
+                //    //    EventBody = new BinaryData(Encoding.UTF8.GetBytes("{}"))
+                //    //});
+
+                //    //DateTime.UtcNow.ToString("yyyyMMddThhmmss"));
+                //}
             }
-
             //// Create String Array for Event Hub Output
             //var myArray = new String[arraySize];
 
@@ -88,15 +120,14 @@ namespace EventHubGroup56FA
             //{
             //    myArray[i] = DateTime.UtcNow.ToString("yyyy-MM-ddThh:mm:ss");
             //}
+            //var myArrayLength = eventDataList.Count;
 
-            var myArrayLength = eventDataList.Count;
+            //for(int i = 0; i < myArrayLength; i++)
+            //{
 
-            for(int i = 0; i < myArrayLength; i++)
-            {
+            //}
 
-            }
-
-            return eventDataList.ToArray();
+            return eventDataList;
         }
 
         public class TestClass
