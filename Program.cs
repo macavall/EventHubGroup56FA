@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 internal class Program
 {
@@ -6,6 +7,10 @@ internal class Program
     {
         var host = new HostBuilder()
         .ConfigureFunctionsWorkerDefaults()
+        .ConfigureServices( s =>
+        {
+            s.AddSingleton<IMyService, MyService>();
+        })
         .Build();
 
         host.Run();
